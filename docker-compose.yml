@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  web:
+    command:
+    - gunicorn
+    - app.wsgi
+    - --bind=0.0.0.0:5000
+    - --workers=${WEB_CONCURRENCY:-1}
+    - --preload
+    - --access-logfile=-
+    environment:
+      REDIS_URL: redis://redis
+    healthcheck:
+      test:
+      - 'CMD'
+      - 'curl'
+      - '-fgkvLI'
+      - '--header'
+      - 'X-Forwarded-Proto: https'
+      - 'http://localhost:5000/health/'
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  redis:
+    image: redis:5.0-alpine
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
