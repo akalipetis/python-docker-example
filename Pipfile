@@ -15,7 +15,7 @@ redis = "*"
 sec = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.11"
 
 [pipenv]
 allow_prereleases = true
